@@ -1,0 +1,12 @@
+callbacks:
+    beforeAll:
+        - callbacks/before_all
+    beforeEach:
+        - callbacks/before_each
+    afterEach:
+        - callbacks/after_each
+    afterAll:
+        - callbacks/after_all
+        - grants
+
+conn: 'dbname=task_tracker user=migrator password=migrator host=localhost port=5432'

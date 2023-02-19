@@ -1,0 +1,1 @@
+pgmigrate -t 1 migrate -c 'dbname=task_tracker user=migrator password=migrator host=localhost port=5432'

@@ -1,0 +1,1 @@
+from task_tracker_backend.constants.files import CONFIG_FILE

@@ -1,0 +1,26 @@
+version: 3.5
+
+services:
+    postgres_master:
+        image: postgres:14.5-bullseye
+        container_name: pg_master
+        environment:
+            POSTGRES_DB: "task_tracker"
+            POSTGRES_USER: "root"
+            POSTGRES_PASSWORD: "root_password"
+        networks:
+            - task_tracker-network
+
+    webserver:
+        image: nginx:alpine
+        container_name: webserver
+        restart: unless-stopped
+        tty: true
+        ports:
+          - "80:80"
+          - "443:443"
+        networks:
+          - task_tracker-network
+
+    backend:
+        image: ubu

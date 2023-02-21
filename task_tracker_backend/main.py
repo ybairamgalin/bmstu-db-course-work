@@ -11,6 +11,7 @@ from task_tracker_backend import utils
 print(__name__)
 task_tracker = FastAPI()
 dependencies = models.Dependencies()
+print('Starting web server backend')
 
 
 def _get_dict_from_body(body):

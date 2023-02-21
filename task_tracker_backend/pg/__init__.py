@@ -1,1 +1,1 @@
-from pg.connection import Pg
+from task_tracker_backend.pg.connection import Pg

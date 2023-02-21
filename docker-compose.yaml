@@ -1,4 +1,4 @@
-version: 3.5
+version: "3.5"
 
 services:
     postgres_master:
@@ -8,8 +8,10 @@ services:
             POSTGRES_DB: "task_tracker"
             POSTGRES_USER: "root"
             POSTGRES_PASSWORD: "root_password"
+        ports:
+            - "5432:5432"
         networks:
-            - task_tracker-network
+            - task_tracker_network
 
     webserver:
         image: nginx:alpine
@@ -20,7 +22,19 @@ services:
           - "80:80"
           - "443:443"
         networks:
-          - task_tracker-network
+          - task_tracker_network
 
     backend:
-        image: ubu
+        image: ubuntu:22.04
+        build: task_tracker_backend/.
+        command: uvicorn task_tracker_backend.main:task_tracker --reload
+        volumes:
+          - ./task_tracker_backend:/backend/task_tracker_backend
+        ports:
+          - "6432:8000"
+        networks:
+          - task_tracker_network
+
+networks:
+    task_tracker_network:
+        driver: bridge

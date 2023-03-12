@@ -1,12 +1,11 @@
-callbacks:
-    beforeAll:
-        - callbacks/before_all
-    beforeEach:
-        - callbacks/before_each
-    afterEach:
-        - callbacks/after_each
-    afterAll:
-        - callbacks/after_all
-#       - grants
+#callbacks:
+#    beforeAll:
+#        - callbacks/before_all
+#    beforeEach:
+#        - callbacks/before_each
+#    afterEach:
+#        - callbacks/after_each
+#    afterAll:
+#        - callbacks/after_all
 
 conn: 'dbname=task_tracker user=root password=root_password host=172.17.0.1 port=5432'

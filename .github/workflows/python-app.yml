@@ -1,0 +1,38 @@
+name: Backend pytest
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U -r task_tracker_backend/requirements.txt
+    - name: Start service
+      run: |
+        make docker-up
+    - name: Wait service to start
+      run: |
+        sleep 10
+    - name: Apply migrations
+      run: |
+        make migrate
+    - name: Run pytest
+      run: |
+        make test-backend

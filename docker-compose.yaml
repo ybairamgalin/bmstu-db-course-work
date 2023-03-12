@@ -34,11 +34,9 @@ services:
             postgres_master:
                 condition: service_started
         command: /bin/sh task_tracker_backend/startup.sh
-#        command: tail -F anything
         volumes:
           - ./task_tracker_backend:/backend/task_tracker_backend
-          - ./postgres/migrations:/backend/migrations
-          - ./postgres/callbacks:/backend/callbacks
+          - ./migrations:/backend/migrations
           - ./logs/backend:/backend/logs
         restart: unless-stopped
         ports:

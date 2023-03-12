@@ -23,6 +23,8 @@ def sql():
     cursor = CONNECTION.cursor()
 
     def _sql(query, args=()):
+        if not query:
+            return None
         cursor.execute(query, args)
         CONNECTION.commit()
         try:

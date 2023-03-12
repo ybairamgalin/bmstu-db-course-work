@@ -33,3 +33,7 @@ test-backend :
 lint : *.py
 	pylint --rcfile=pylintrc $(git ls-files '*.py')
 
+.PHONE : migrate
+migrate :
+	pgmigrate -t latest migrate;
+	pgmigrate -t latest info;

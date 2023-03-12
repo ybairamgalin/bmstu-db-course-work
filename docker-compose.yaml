@@ -4,14 +4,17 @@ services:
     postgres_master:
         image: postgres:14.5-bullseye
         container_name: pg_master
+        volumes:
+          - ./postgres:/postgres/schema
+        restart: unless-stopped
         environment:
             POSTGRES_DB: "task_tracker"
             POSTGRES_USER: "root"
             POSTGRES_PASSWORD: "root_password"
         ports:
-            - "5432:5432"
+          - "5432:5432"
         networks:
-            - task_tracker_network
+          - task_tracker_network
 
     webserver:
         image: nginx:alpine
@@ -27,9 +30,17 @@ services:
     backend:
         image: ubuntu:22.04
         build: task_tracker_backend/.
-        command: uvicorn task_tracker_backend.main:task_tracker --reload
+        depends_on:
+            postgres_master:
+                condition: service_started
+        command: /bin/sh task_tracker_backend/startup.sh
+#        command: tail -F anything
         volumes:
           - ./task_tracker_backend:/backend/task_tracker_backend
+          - ./postgres/migrations:/backend/migrations
+          - ./postgres/callbacks:/backend/callbacks
+          - ./logs/backend:/backend/logs
+        restart: unless-stopped
         ports:
           - "6432:8000"
         networks:

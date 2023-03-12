@@ -7,6 +7,6 @@ callbacks:
         - callbacks/after_each
     afterAll:
         - callbacks/after_all
-        - grants
+#       - grants
 
-conn: 'dbname=task_tracker user=migrator password=migrator host=localhost port=5432'
+conn: 'dbname=task_tracker user=root password=root_password host=172.17.0.1 port=5432'

@@ -25,6 +25,11 @@ setup :
 	mkdir -p logs
 	mkdir -p logs/backend
 
-.PHONE : test-backend
+.PHONY : test-backend
 test-backend :
 	pytest -vv testsuite/;
+
+.PHONY : lint
+lint : *.py
+	pylint --rcfile=pylintrc $(git ls-files '*.py')
+

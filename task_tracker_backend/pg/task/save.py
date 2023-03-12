@@ -16,6 +16,6 @@ def save_task_returning_id(
             SQL_SAVE_TASK,
             (task.title, task.content, task.creator_id, task.executor_id),
         )
-    except Exception as e:
-        raise RuntimeError('Could not create task')
+    except Exception as error:
+        raise RuntimeError('Could not create task') from error
     return db_response[0][0]

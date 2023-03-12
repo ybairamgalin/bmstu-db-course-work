@@ -8,7 +8,10 @@ HANDLER = 'http://localhost:6432/task'
 def test_200(sql):
     _insert_user(sql)
     _insert_task(sql)
-    response = requests.get(utils.gen_query(HANDLER, {'task_id': 1}))
+    response = requests.get(
+        utils.gen_query(HANDLER, {'task_id': 1}),
+        timeout=5,
+    )
     assert response.status_code == 200
     assert response.json() == {
         'task': {

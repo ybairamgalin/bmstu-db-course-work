@@ -5,7 +5,7 @@ import datetime
 
 
 @dataclasses.dataclass
-class Task(object):
+class Task:
     id: Optional[int] = None
     title: Optional[str] = None
     content: Optional[str] = None

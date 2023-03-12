@@ -13,5 +13,8 @@ async def task_get(task_id: int, dependencies: models.Dependencies):
         return Response(utils.to_json(
             {"task": dataclasses.asdict(task)}), status_code=200
         )
-    except RuntimeError as e:
-        return Response(utils.to_json({'message': str(e)}), status_code=404)
+    except RuntimeError as error:
+        return Response(utils.to_json(
+            {'message': str(error)}),
+            status_code=404
+        )

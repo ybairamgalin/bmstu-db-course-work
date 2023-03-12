@@ -4,7 +4,7 @@ from task_tracker_backend import constants
 from task_tracker_backend import pg
 
 
-class Dependencies(object):
+class Dependencies:
     def __init__(self):
         self.config = _init_config()
         print(self.config.items())

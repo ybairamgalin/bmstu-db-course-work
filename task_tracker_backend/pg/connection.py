@@ -1,7 +1,7 @@
 import psycopg2
 
 
-class Pg(object):
+class Pg:
     def __init__(self, credentials):
         self.connection = psycopg2.connect(
             database=credentials['database'],
@@ -17,6 +17,6 @@ class Pg(object):
             cursor.execute(query, args)
             self.connection.commit()
             return cursor.fetchall()
-        except Exception as e:
+        except Exception as error:
             self.connection.rollback()
-            raise e
+            raise error

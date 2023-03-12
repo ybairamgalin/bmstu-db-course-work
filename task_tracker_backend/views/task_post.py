@@ -1,5 +1,3 @@
-import json
-
 from starlette.responses import Response
 
 from task_tracker_backend import models

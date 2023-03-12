@@ -16,7 +16,6 @@ CONNECTION = psycopg2.connect(
     host=CREDENTIALS['host'],
     port=CREDENTIALS['port'],
 )
-# TODO extract creds, make adaptors
 
 
 @pytest.fixture()

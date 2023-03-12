@@ -12,9 +12,9 @@ where id=%s
 def get_task_by_id(task_id: int, dependencies: models.Dependencies):
     try:
         result = dependencies.pg.execute(SQL_GET_TASK, (task_id,))
-    except Exception as e:
-        logging.log(logging.ERROR, e)
-        raise RuntimeError('Could not get task by id')
+    except Exception as error:
+        logging.log(logging.ERROR, error)
+        raise RuntimeError('Could not get task by id') from error
     if len(result) == 0:
         raise RuntimeError(f'No task with id {task_id}')
 

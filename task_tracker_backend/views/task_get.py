@@ -7,10 +7,11 @@ from task_tracker_backend import utils
 from task_tracker_backend.pg.task.get import get_task_by_id
 
 
-async def task_get(body: dict, dependencies: models.Dependencies):
-    if 'task_id' not in body:
-        raise RuntimeError('No task id')
-    task = get_task_by_id(body['task_id'], dependencies)
-    return Response(utils.to_json(
-        {"task": dataclasses.asdict(task)}), status_code=200
-    )
+async def task_get(task_id: int, dependencies: models.Dependencies):
+    try:
+        task = get_task_by_id(task_id, dependencies)
+        return Response(utils.to_json(
+            {"task": dataclasses.asdict(task)}), status_code=200
+        )
+    except RuntimeError as e:
+        return Response(utils.to_json({'message': str(e)}), status_code=404)

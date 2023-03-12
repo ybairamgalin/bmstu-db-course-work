@@ -24,3 +24,7 @@ docker-build : task_tracker_backend/Dockerfile
 setup :
 	mkdir -p logs
 	mkdir -p logs/backend
+
+.PHONE : test-backend
+test-backend :
+	pytest -vv testsuite/;

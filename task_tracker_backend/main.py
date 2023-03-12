@@ -26,20 +26,16 @@ async def _try_handle_request(body, handler):
         return Response(utils.to_json({'message': str(e)}), status_code=400)
 
 
-@task_tracker.post('/task')
-async def task_post(*, request: Request):
-    body = await request.body()
-    response = await _try_handle_request(
-        _get_dict_from_body(body), views.task_get
-    )
-    return response
+# @task_tracker.post('/task')
+# async def task_post(*, request: Request):
+#     body = await request.body()
+#     response = await _try_handle_request(
+#         _get_dict_from_body(body), views.task_get
+#     )
+#     return response
 
 
 @task_tracker.get('/task')
 async def task_get(task_id: int):
-    print(task_id)
-    response = await _try_handle_request(
-        {'task_id': task_id},
-        views.task_get
-    )
+    response = await views.task_get(task_id, dependencies)
     return response

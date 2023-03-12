@@ -1,5 +1,5 @@
 create table if not exists task_tracker.users(
-    id int8 not null generated always as identity primary key,
+    id bigserial not null primary key,
     username text not null unique,
     name text,
     salt text not null,
@@ -7,7 +7,7 @@ create table if not exists task_tracker.users(
 );
 
 create table if not exists task_tracker.tasks(
-    id int8 not null generated always as identity primary key,
+    id bigserial not null primary key,
     title text not null,
     content text,
     creator int8 not null,

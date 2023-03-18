@@ -4,7 +4,7 @@ SQL_SAVE_TASK = """
 insert into task_tracker.tasks(title, content, creator, executor)
 values
     (%s, %s, %s, %s)
-returning id
+returning public_id
 """
 
 

@@ -1,7 +1,10 @@
-from typing import Optional
-
 import dataclasses
 import datetime
+
+from typing import Optional
+from typing import Union
+
+from pydantic import BaseModel
 
 
 @dataclasses.dataclass
@@ -13,3 +16,8 @@ class Task:
     executor_id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
+
+
+class TaskPostRequestBody(BaseModel):
+    title: str
+    content: Union[str, None] = None

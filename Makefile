@@ -11,7 +11,7 @@ docker-up-v : setup docker-build docker-compose.yaml
 docker-down :
 	docker compose stop
 
-.PHONE : docker-restart
+.PHONY : docker-restart
 docker-restart :
 	docker compose stop
 	docker compose up

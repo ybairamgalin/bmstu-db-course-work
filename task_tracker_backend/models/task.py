@@ -21,3 +21,11 @@ class Task:
 class TaskPostRequestBody(BaseModel):
     title: str
     content: Union[str, None] = None
+
+
+class TaskInfoPostRequestBody(BaseModel):
+    cursor: Union[str, None] = None
+    name_part: Union[str, None] = None
+    topic: Union[str, None] = None
+    order_by: Union[str, None] = None
+    executor_username: Union[str, None] = None

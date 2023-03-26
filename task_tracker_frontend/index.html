@@ -72,11 +72,11 @@
                         </div>
                     </div>
                     <button id="find_tasks" onclick="show_all_tasks()"
-                            type="submit" class="btn btn-dark">Найти!</button>
+                            type="button" class="btn btn-dark">Найти!</button>
                 </form>
             </div>
             <div class="my-2">
-                <table class="table">
+                <table id="tasks_table" class="table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -84,154 +84,13 @@
                             <th scope="col">Название</th>
                             <th scope="col">Создатель</th>
                             <th scope="col">Исполнитель</th>
-                            <th scope="col">Дедлайн</th>
                             <th scope="col">Создано</th>
                             <th scope="col">Обновлено</th>
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>FRONT</td>
-                          <td>[course-work] Сделать экран всех задач</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">4</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">5</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">6</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">7</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">8</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">9</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">10</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">11</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">12</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">13</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">14</th>
-                          <td>BACK</td>
-                          <td>[course-work] Сделать ручку отдающую инфо</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>Ярослав Байрамгалин</td>
-                          <td>15.05.2023</td>
-                          <td>15.05.2022</td>
-                          <td>20.05.2022</td>
-                        </tr>
-                        </tbody>
+                    <tbody id="task_table_rows">
+                    </tbody>
                 </table>
             </div>
             <div class="my-2">

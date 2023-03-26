@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-HANDLER = 'http://localhost:6432/task'
+HANDLER = 'http://localhost:6432/api/task'
 
 
 @pytest.mark.parametrize(

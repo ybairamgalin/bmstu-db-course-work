@@ -2,7 +2,7 @@ import requests
 
 from testsuite.test_task_tracker_backend import utils
 
-HANDLER = 'http://localhost:6432/task'
+HANDLER = 'http://localhost:6432/api/task'
 
 
 def test_404():

@@ -19,6 +19,8 @@ services:
     webserver:
         image: nginx:alpine
         container_name: webserver
+        volumes:
+          - ./task_tracker_frontend:/usr/share/nginx/html
         restart: unless-stopped
         tty: true
         ports:

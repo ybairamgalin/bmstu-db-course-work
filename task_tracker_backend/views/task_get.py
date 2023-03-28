@@ -10,8 +10,10 @@ from task_tracker_backend.pg.task.get import get_task_by_id
 async def task_get(task_id: int, dependencies: models.Dependencies):
     try:
         task = get_task_by_id(task_id, dependencies)
-        return Response(utils.to_json(
-            {"task": dataclasses.asdict(task)}), status_code=200
+        return Response(utils.to_json({
+                "task": dataclasses.asdict(task)
+            }),
+            status_code=200,
         )
     except RuntimeError as error:
         return Response(utils.to_json(

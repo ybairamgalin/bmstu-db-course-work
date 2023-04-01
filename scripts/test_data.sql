@@ -23,4 +23,10 @@ values
     (10, 'task title 10', 'task content 10', '2', '3', '2022-10-03 12:34:13', '2022-10-10 12:44:13'),
     (11, 'task title 11', 'task content 11', '3', '1', '2022-11-03 12:34:13', '2022-10-11 12:44:13');
 
+insert into task_tracker.topics (id, name)
+values
+    (1, 'backend'),
+    (2, 'frontend'),
+    (3, 'devops');
+
 commit transaction;

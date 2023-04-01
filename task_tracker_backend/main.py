@@ -47,3 +47,9 @@ async def task_info_post(
 ):
     response = await views.task_info_post(body, dependencies)
     return response
+
+
+@task_tracker.get('/api/topic/info')
+async def topic_info_get():
+    response = await views.topic_info_get(dependencies)
+    return response

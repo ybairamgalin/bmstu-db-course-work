@@ -7,6 +7,12 @@ from task_tracker.tokens
 where user_id = %s
 """
 
+SQL_SELECT_TOKEN_BY_UUID = """
+select uuid, expires_at, user_id
+from task_tracker.tokens
+where uuid = %s
+"""
+
 
 def get_tokens_by_user_id(user_id, dependencies: models.Dependencies):
     response = dependencies.pg.execute(
@@ -20,3 +26,15 @@ def get_tokens_by_user_id(user_id, dependencies: models.Dependencies):
         )
 
     return tokens
+
+
+def get_token_by_uuid(uuid, dependencies: models.Dependencies):
+    response = dependencies.pg.execute(
+        SQL_SELECT_TOKEN_BY_UUID, (uuid,),
+    )
+
+    if len(response) == 0:
+        return None
+
+    token = response[0]
+    return models.Token(uuid=token[0], expires_at=token[1], user_id=token[2])

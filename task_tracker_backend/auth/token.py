@@ -31,6 +31,25 @@ def get_user_token(user_id, dependencies: models.Dependencies):
         token = make_new_token(user_id)
         return save_token_returning_uuid(token, dependencies)
 
-    return latest_token
+    return latest_token.uuid
 
+
+# def validate_user(x_user_token: str, dependencies: models.Dependencies):
+#     unauthorized_response = Response(
+#         utils.to_json({'message': 'Unauthorized'}),
+#         status_code=401
+#     )
+#     if x_user_token is None:
+#         return unauthorized_response
+#     token = get_token_by_uuid(x_user_token, dependencies)
+#     if token is None:
+#         return unauthorized_response
+#
+#     if token.expires_at < dt.datetime.utcnow():
+#         return unauthorized_response
+#
+#     return Response(
+#         status_code=200,
+#         headers={constants.X_USER_TOKEN_HEADER: x_user_token}
+#     )
 

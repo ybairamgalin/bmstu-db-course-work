@@ -9,6 +9,15 @@ class UserCreatePostRequest(BaseModel):
     hashed_password: str
 
 
+class UserCreatePostResponse(BaseModel):
+    username: str
+
+
+class UserAuthPostRequest(BaseModel):
+    username: str
+    hashed_password: str
+
+
 @dataclasses.dataclass
 class DbUser:
     username: str

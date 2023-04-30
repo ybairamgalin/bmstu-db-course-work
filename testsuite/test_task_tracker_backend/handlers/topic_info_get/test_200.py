@@ -1,7 +1,5 @@
 import requests
 
-from testsuite.test_task_tracker_backend import utils
-
 HANDLER = 'http://localhost:6432/api/topic/info'
 TOPIC_NAME = 'topic_name'
 
@@ -11,7 +9,9 @@ def test_200(sql):
 
     response = requests.get(HANDLER, timeout=5)
     assert response.status_code == 200
-    assert response.json() == {'topics': [TOPIC_NAME]}
+    assert response.json() == {
+        'topics': [{'id': 1, 'name': TOPIC_NAME}]
+    }
 
 
 def _insert_topic(sql):

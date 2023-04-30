@@ -15,7 +15,7 @@ from task_tracker.tasks t
     left join task_tracker.users u1 on t.creator = u1.id
     left join task_tracker.users u2 on t.executor = u2.id
 where created_at < %s
-  and t.title like %s
+  and lower(t.title) like %s
 order by created_at desc 
 limit %s
 """
@@ -44,7 +44,6 @@ def get_task_by_id(task_id: int, dependencies: models.Dependencies):
 
     db_task = result[0]
     task = map_db_task_to_models_task(db_task)
-
     return task
 
 
@@ -59,7 +58,7 @@ def get_tasks(
             SQL_GET_TASKS,
             (
                 last_created_at,
-                f'%{name_part}%' if name_part else '%',
+                f'%{name_part.lower()}%' if name_part else '%',
                 limit,
             )
         )

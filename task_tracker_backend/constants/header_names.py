@@ -1,0 +1,1 @@
+X_USER_TOKEN_HEADER = 'X-User-Token'

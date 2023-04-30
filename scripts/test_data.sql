@@ -2,6 +2,7 @@ begin transaction;
 
 delete from task_tracker.tasks;
 delete from task_tracker.users;
+delete from task_tracker.topics;
 
 insert into task_tracker.users(id, username, name, salt, password)
 values

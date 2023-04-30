@@ -1,3 +1,26 @@
+window.onload = function load_topics() {
+    fetch('http://localhost:6432/api/topic/info', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => show_topics(data))
+}
+
+function show_topics(data) {
+    let topics_dropdown = document.getElementById('topic_select')
+    clear_children(topics_dropdown)
+    data['topics'].splice(0, 0, {'id': 0, 'name': 'ANY'})
+
+    for (let i = 0; i < data['topics'].length; i++) {
+        let new_option = document.createElement('option')
+        let option_text = document.createTextNode(
+            data['topics'][i]['name'].toUpperCase())
+        new_option.setAttribute('value', data['topics'][i]['id'])
+        new_option.appendChild(option_text)
+        topics_dropdown.appendChild(new_option)
+    }
+}
+
 function create_sell(value, ref = null) {
     let element = document.createElement("td")
     if (!ref) {
@@ -80,8 +103,7 @@ function display_tasks(tasks) {
         return
     }
 
-    create_empty_table()
-    let rows = document.getElementById('task_table_rows')
+    create_empty_table()    let rows = document.getElementById('task_table_rows')
 
     let first = rows.firstElementChild
     while (first) {
@@ -101,6 +123,12 @@ function show_all_tasks() {
         'name_part': document.getElementById('task_search_field').value
     }
 
+    let selected_topic = Number(
+        document.getElementById('topic_select').value)
+    if (selected_topic !== 0) {
+        request_body['topic_id'] = selected_topic
+    }
+
     fetch('http://localhost:6432/api/task/info', {
             method: 'POST',
             body: JSON.stringify(request_body),
@@ -111,3 +139,4 @@ function show_all_tasks() {
         .then(response => response.json())
         .then(data => display_tasks(data))
 }
+

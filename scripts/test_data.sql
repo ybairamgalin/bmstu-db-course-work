@@ -2,6 +2,7 @@ begin transaction;
 
 delete from task_tracker.tasks;
 delete from task_tracker.users;
+delete from task_tracker.topics;
 
 insert into task_tracker.users(id, username, name, salt, password)
 values
@@ -22,5 +23,11 @@ values
     (9, 'task title 9', 'task content 9', '1', '1', '2022-03-09 12:34:13', '2022-10-09 12:44:13'),
     (10, 'task title 10', 'task content 10', '2', '3', '2022-10-03 12:34:13', '2022-10-10 12:44:13'),
     (11, 'task title 11', 'task content 11', '3', '1', '2022-11-03 12:34:13', '2022-10-11 12:44:13');
+
+insert into task_tracker.topics (id, name)
+values
+    (1, 'backend'),
+    (2, 'frontend'),
+    (3, 'devops');
 
 commit transaction;

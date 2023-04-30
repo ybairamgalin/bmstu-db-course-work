@@ -42,8 +42,30 @@ async def task_post(
 
 
 @task_tracker.post('/api/task/info')
-async def task_info_post(
-        body: models.TaskInfoPostRequestBody,
-):
+async def task_info_post(body: models.TaskInfoPostRequestBody):
     response = await views.task_info_post(body, dependencies)
+    return response
+
+
+@task_tracker.get('/api/topic/info')
+async def topic_info_get():
+    response = await views.topic_info_get(dependencies)
+    return response
+
+
+@task_tracker.post(
+    '/api/user/create',
+    status_code=201,
+    response_model=models.UserCreatePostResponse,
+    responses={409: {"model": models.ErrorResponse}},
+)
+async def user_create_post(body: models.UserCreatePostRequest):
+    """Регистрация нового пользователя"""
+    response = await views.user_create_post(body, dependencies)
+    return response
+
+
+@task_tracker.post('/api/user/auth')
+async def user_auth_post(body: models.UserAuthPostRequest):
+    response = await views.user_auth_post(body, dependencies)
     return response

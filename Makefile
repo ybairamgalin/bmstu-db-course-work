@@ -3,7 +3,7 @@
 docker-up : setup docker-build docker-compose.yaml
 	docker compose up --detach
 
-.PHONE : docker-up-v
+.PHONY : docker-up-v
 docker-up-v : setup docker-build docker-compose.yaml
 	docker compose up
 

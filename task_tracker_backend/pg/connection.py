@@ -11,7 +11,7 @@ class Pg:
             port=credentials['port'],
         )
 
-    def execute(self, query, args):
+    def execute(self, query, args=()):
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, args)

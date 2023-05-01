@@ -8,14 +8,8 @@ from task_tracker_backend.pg.task.save import save_task_returning_id
 
 
 def to_models_task(
-        user_request: models.TaskPostRequestBody,
-        user_id_str: str,
+        user_request: models.TaskPostRequestBody, user_id: int,
 ):
-    try:
-        user_id = int(user_id_str)
-    except ValueError as error:
-        raise RuntimeError('Bad user id') from error
-
     return models.Task(
         title=user_request.title,
         content=user_request.content,
@@ -25,22 +19,10 @@ def to_models_task(
 
 async def task_post(
         request: models.TaskPostRequestBody,
-        x_user_id: Union[str, None],
+        token: models.Token,
         dependencies: models.Dependencies,
 ):
-    if not x_user_id:
-        return Response(
-            utils.to_json({'message': 'Missing X-User-Id header'}),
-            status_code=401,
-        )
-
-    try:
-        task = to_models_task(request, x_user_id)
-    except RuntimeError:
-        return Response(
-            utils.to_json({'message': 'Bad user id'}),
-            status_code=401,
-        )
+    task = to_models_task(request, token.user_id)
 
     try:
         task_id = save_task_returning_id(task, dependencies)

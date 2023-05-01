@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi import Header
 from fastapi.middleware.cors import CORSMiddleware
 
+from task_tracker_backend import auth
 from task_tracker_backend import models
 from task_tracker_backend import views
 
@@ -35,9 +36,10 @@ async def task_get(task_id: int):
 @task_tracker.post('/api/task')
 async def task_post(
         body: models.TaskPostRequestBody,
-        x_user_id: Union[str, None] = Header(default=None),
+        x_user_token: Union[str, None] = Header(default=None),
 ):
-    response = await views.task_post(body, x_user_id, dependencies)
+    auth_token = auth.validate_token(x_user_token, dependencies)
+    response = await views.task_post(body, auth_token, dependencies)
     return response
 
 

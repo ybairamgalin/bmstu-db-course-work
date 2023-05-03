@@ -29,6 +29,7 @@ print('Starting web server backend')
 
 @task_tracker.get('/api/task')
 async def task_get(task_id: int):
+    """Получение информации о задачи по ее id"""
     response = await views.task_get(task_id, dependencies)
     return response
 
@@ -38,19 +39,28 @@ async def task_post(
         body: models.TaskPostRequestBody,
         x_user_token: Union[str, None] = Header(default=None),
 ):
+    """Создание задачи"""
     auth_token = auth.validate_token(x_user_token, dependencies)
     response = await views.task_post(body, auth_token, dependencies)
     return response
 
 
 @task_tracker.post('/api/task/info')
-async def task_info_post(body: models.TaskInfoPostRequestBody):
+async def task_info_post(
+        body: models.TaskInfoPostRequestBody,
+        x_user_token: Union[str, None] = Header(default=None),
+):
+    auth.validate_token(x_user_token, dependencies)
     response = await views.task_info_post(body, dependencies)
     return response
 
 
 @task_tracker.get('/api/topic/info')
-async def topic_info_get():
+async def topic_info_get(
+        x_user_token: Union[str, None] = Header(default=None),
+):
+    """Получение информации о топиках"""
+    auth.validate_token(x_user_token, dependencies)
     response = await views.topic_info_get(dependencies)
     return response
 
@@ -69,5 +79,6 @@ async def user_create_post(body: models.UserCreatePostRequest):
 
 @task_tracker.post('/api/user/auth')
 async def user_auth_post(body: models.UserAuthPostRequest):
+    """Авторизация пользователя"""
     response = await views.user_auth_post(body, dependencies)
     return response

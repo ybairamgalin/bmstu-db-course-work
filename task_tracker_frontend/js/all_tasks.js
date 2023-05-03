@@ -1,6 +1,24 @@
+function try_get_token() {
+    if (localStorage.getItem('x-user-token')) {
+        return localStorage.getItem('x-user-token');
+    }
+
+    window.location.replace('http://localhost/auth');
+}
+
+function show_user_data() {
+    let paragraph = document.getElementById('username_paragraph');
+    let username = localStorage.getItem('task_tracker_name');
+    paragraph.appendChild(document.createTextNode(username));
+}
+
 window.onload = function load_topics() {
+    const token = try_get_token();
+    show_user_data();
+
     fetch('http://localhost:6432/api/topic/info', {
-        method: 'GET'
+        method: 'GET',
+        headers: {'X-User-Token': token},
     })
     .then(response => response.json())
     .then(data => show_topics(data))
@@ -103,7 +121,8 @@ function display_tasks(tasks) {
         return
     }
 
-    create_empty_table()    let rows = document.getElementById('task_table_rows')
+    create_empty_table()
+    let rows = document.getElementById('task_table_rows')
 
     let first = rows.firstElementChild
     while (first) {
@@ -128,12 +147,14 @@ function show_all_tasks() {
     if (selected_topic !== 0) {
         request_body['topic_id'] = selected_topic
     }
+    const token = try_get_token()
 
     fetch('http://localhost:6432/api/task/info', {
             method: 'POST',
             body: JSON.stringify(request_body),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-User-Token': token,
             }
         })
         .then(response => response.json())

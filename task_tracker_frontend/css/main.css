@@ -7,6 +7,10 @@ main {
     overflow-y: hidden;
 }
 
+textarea {
+    resize: none;
+}
+
 .side-bar {
     width: 330px;
 }

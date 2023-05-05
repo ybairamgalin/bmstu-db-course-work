@@ -3,6 +3,7 @@ import datetime
 
 from typing import Optional
 from typing import Union
+from typing import List
 
 from pydantic import BaseModel
 
@@ -12,14 +13,22 @@ class Task:
     id: Optional[int] = None
     title: Optional[str] = None
     content: Optional[str] = None
+    tags: List[str] = None
     creator_id: Optional[int] = None
     executor_id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
 
 
+@dataclasses.dataclass
+class TaskTag:
+    task_id: int
+    tag_id: int
+
+
 class TaskPostRequestBody(BaseModel):
     title: str
+    tags: Union[str, None] = None
     content: Union[str, None] = None
 
 

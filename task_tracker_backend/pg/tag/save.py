@@ -1,6 +1,5 @@
 from typing import List
-
-from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_SAVE_TAGS = """
 insert into task_tracker.tags (value)

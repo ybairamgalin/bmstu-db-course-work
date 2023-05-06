@@ -1,7 +1,10 @@
 import uuid
 import datetime as dt
 
+from typing import Union
+
 from fastapi import HTTPException
+from fastapi import Header
 
 from task_tracker_backend import constants
 from task_tracker_backend import models
@@ -38,7 +41,7 @@ def get_user_token(user_id):
     return latest_token.uuid
 
 
-def validate_token(x_user_token):
+def validate_token(x_user_token: Union[str, None] = Header(default=None)):
     if x_user_token is None:
         raise HTTPException(401, f'Missing {constants.X_USER_TOKEN_HEADER} header')
     token = get_token_by_uuid(x_user_token)

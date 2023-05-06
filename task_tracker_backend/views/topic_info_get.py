@@ -1,6 +1,5 @@
 from starlette.responses import Response
 
-from task_tracker_backend import models
 from task_tracker_backend import utils
 from task_tracker_backend.pg.topic.get import get_all_topic_names
 

@@ -1,6 +1,5 @@
 from starlette.responses import Response
 
-from task_tracker_backend import models
 from task_tracker_backend import utils
 
 from task_tracker_backend.pg.user.get import get_users_by_name_part

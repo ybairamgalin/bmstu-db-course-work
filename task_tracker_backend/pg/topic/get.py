@@ -1,4 +1,3 @@
-from task_tracker_backend import models
 from task_tracker_backend import pg
 
 SQL_GET_ALL_TOPIC_NAMES = """

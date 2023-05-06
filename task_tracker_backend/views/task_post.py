@@ -1,4 +1,3 @@
-from typing import Union
 from typing import List
 
 from starlette.responses import Response
@@ -12,11 +11,8 @@ from task_tracker_backend.pg.tag.save import save_tags_returning_ids
 from task_tracker_backend.pg.tag.get import get_tags_by_values
 
 
-def parse_tags(tags_string: Union[str, None]):
-    if tags_string is None:
-        return list()
-
-    return [tag.strip() for tag in tags_string.split(',')]
+def trim_tags(tags: List[str]):
+    return [tag.strip() for tag in tags]
 
 
 def convert_to_models_task(
@@ -26,7 +22,7 @@ def convert_to_models_task(
         title=user_request.title,
         content=user_request.content,
         creator_id=user_id,
-        tags=parse_tags(user_request.tags),
+        tags=trim_tags(user_request.tags),
     )
 
 

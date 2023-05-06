@@ -82,3 +82,16 @@ async def user_auth_post(body: models.UserAuthPostRequest):
     """Авторизация пользователя"""
     response = await views.user_auth_post(body, dependencies)
     return response
+
+
+@task_tracker.get(
+    '/api/users/find', response_model=models.UsersFindGetResponse,
+)
+async def users_find_get(
+        query: str,
+        limit: int = 7,
+        x_user_token: Union[str, None] = Header(default=None)):
+    """Поиск пользователя по части имени или логина"""
+    auth.validate_token(x_user_token, dependencies)
+    response = await views.users_find_get(query, limit, dependencies)
+    return response

@@ -17,6 +17,7 @@
         crossorigin="anonymous">
 </script>
 <main>
+    <script src="../js/create_task.js"></script>
     <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark side-bar">
         <h2>Task tracker</h2>
         <hr>
@@ -38,8 +39,8 @@
                         <input type="text" class="form-control form-control-lg" id="input_task_title">
                     </div>
                     <div class="form-group my-3">
-                        <label for="task_description">Содержание задачи</label>
-                        <textarea class="form-control" id="task_description" rows="4"></textarea>
+                        <label for="input_task_description">Содержание задачи</label>
+                        <textarea class="form-control" id="input_task_description" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="select_topic">Топик</label>
@@ -52,19 +53,23 @@
                         </select>
                     </div>
                     <div class="form-group my-3">
-                        <label for="input_task_title">Теги (через запятую)</label>
-                        <input type="text" class="form-control" id="input_task_tag">
+                        <label for="input_task_title">Теги (через пробел)</label>
+                        <input type="text" oninput="handle_tag_input_change()" class="form-control" id="input_task_tag">
+                        <div id="tags_div">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="select_executor">Исполнитель</label>
-                        <select class="form-control" id="select_executor">
-                            <option>Не назначен</option>
-                            <option>Василий Пупкин @vpupkin</option>
-                            <option>Иван Иванов @ivanov</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
+                        <label for="input_task_executor">Исполнитель</label>
+                        <input type="text" oninput="handle_executor_input_change()" list="list_task_executor_suggests"
+                               class="form-control" id="input_task_executor">
+                        <datalist id="list_task_executor_suggests">
+                        </datalist>
                     </div>
+                    <div class="form-group my-3">
+                        <button id="button_create_task" onclick="create_task()"
+                            type="button" class="btn btn-dark">Создать задачу</button>
+                    </div>
+
                 </div>
             </form>
         </div>

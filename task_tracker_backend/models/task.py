@@ -28,8 +28,9 @@ class TaskTag:
 
 class TaskPostRequestBody(BaseModel):
     title: str
-    tags: Union[str, None] = None
+    tags: List[str] = None
     content: Union[str, None] = None
+    executor_username: Union[str, None] = None
 
 
 class TaskInfoPostRequestBody(BaseModel):

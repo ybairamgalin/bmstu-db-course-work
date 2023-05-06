@@ -20,6 +20,14 @@ function handle_registry(data) {
         show_error_message('Пользователь с таким именем уже существует')
         return;
     }
+    if (data.status === 400) {
+        data.json().then(
+            body => {
+                show_error_message(body['message']);
+            }
+        )
+
+    }
     if (data.status !== 201) {
         show_error_message(data.status);
         return;

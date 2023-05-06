@@ -62,12 +62,21 @@ function clear_children(node) {
 }
 
 function create_table_row(row_number, task) {
+    let title = task['title']
+    if (title.length > 30) {
+        title = title.substring(0, 29) + '. . .'
+    }
+    let executor = task['executor']
+    if (executor == null) {
+        executor = 'не назначен'
+    }
+
     let row = document.createElement("tr")
     row.appendChild(create_sell(row_number.toString()))
     row.appendChild(create_sell('FRONT'))
-    row.appendChild(create_sell(task['title'], `/task/${task['public_id']}`))
+    row.appendChild(create_sell(title, `/task/${task['public_id']}`))
     row.appendChild(create_sell(task['creator']))
-    row.appendChild(create_sell(task['executor']))
+    row.appendChild(create_sell(executor))
     row.appendChild(create_sell(task['created_at']))
     row.appendChild(create_sell(task['updated_at']))
 

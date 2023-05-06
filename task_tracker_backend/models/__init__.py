@@ -1,4 +1,4 @@
-from task_tracker_backend.models.dependencies import Dependencies
+from task_tracker_backend.models.config import Config
 
 from task_tracker_backend.models.tag import Tag
 

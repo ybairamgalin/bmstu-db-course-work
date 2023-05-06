@@ -1,4 +1,5 @@
 from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_GET_TAGS = """
 select id,value
@@ -7,8 +8,8 @@ where value in (select unnest(%(tags)s))
 """
 
 
-def get_tags_by_values(tags, dependencies: models.Dependencies):
-    result = dependencies.pg.execute(SQL_GET_TAGS, {'tags': tags})
+def get_tags_by_values(tags):
+    result = pg.Pg.execute(SQL_GET_TAGS, {'tags': tags})
 
     tags = list()
     for row in result:

@@ -2,30 +2,44 @@ import psycopg2
 
 
 class Pg:
-    def __init__(self, credentials):
-        self.connection = psycopg2.connect(
-            database=credentials['database'],
-            user=credentials['user'],
-            password=credentials['password'],
-            host=credentials['host'],
-            port=credentials['port'],
-        )
+    __connection = None
+    __credentials = None
 
-    def execute_no_return(self, query, args=()):
+    def __init__(self):
+        raise RuntimeError('Constructor should not be called')
+
+    @staticmethod
+    def open_connection(credentials):
+        Pg.__credentials = credentials
+        Pg.__init_connection()
+
+    @staticmethod
+    def execute_no_return(query, args=()):
         try:
-            cursor = self.connection.cursor()
+            cursor = Pg.__connection.cursor()
             cursor.execute(query, args)
-            self.connection.commit()
+            Pg.__connection.commit()
         except Exception as error:
-            self.connection.rollback()
+            Pg.__connection.rollback()
             raise error
 
-    def execute(self, query, args=()):
+    @staticmethod
+    def execute(query, args=()):
         try:
-            cursor = self.connection.cursor()
+            cursor = Pg.__connection.cursor()
             cursor.execute(query, args)
-            self.connection.commit()
+            Pg.__connection.commit()
             return cursor.fetchall()
         except Exception as error:
-            self.connection.rollback()
+            Pg.__connection.rollback()
             raise error
+
+    @staticmethod
+    def __init_connection():
+        Pg.__connection = psycopg2.connect(
+            database=Pg.__credentials['database'],
+            user=Pg.__credentials['user'],
+            password=Pg.__credentials['password'],
+            host=Pg.__credentials['host'],
+            port=Pg.__credentials['port'],
+        )

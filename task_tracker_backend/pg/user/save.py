@@ -1,4 +1,5 @@
 from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_SAVE_USER = """
 insert into task_tracker.users(username, name, salt, password)
@@ -7,11 +8,9 @@ returning id
 """
 
 
-def save_user_returning_id(
-        user: models.DbUser, dependencies: models.Dependencies
-):
+def save_user_returning_id(user: models.DbUser):
     try:
-        db_response = dependencies.pg.execute(
+        db_response = pg.Pg.execute(
             SQL_SAVE_USER,
             (user.username, user.name, user.salt, user.salted_password),
         )

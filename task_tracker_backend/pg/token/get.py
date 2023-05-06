@@ -1,4 +1,5 @@
 from task_tracker_backend import models
+from task_tracker_backend import pg
 
 
 SQL_SELECT_TOKEN_BY_USER_ID = """
@@ -14,8 +15,8 @@ where uuid = %s
 """
 
 
-def get_tokens_by_user_id(user_id, dependencies: models.Dependencies):
-    response = dependencies.pg.execute(
+def get_tokens_by_user_id(user_id):
+    response = pg.Pg.execute(
         SQL_SELECT_TOKEN_BY_USER_ID, (user_id,),
     )
 
@@ -28,8 +29,8 @@ def get_tokens_by_user_id(user_id, dependencies: models.Dependencies):
     return tokens
 
 
-def get_token_by_uuid(uuid, dependencies: models.Dependencies):
-    response = dependencies.pg.execute(
+def get_token_by_uuid(uuid):
+    response = pg.Pg.execute(
         SQL_SELECT_TOKEN_BY_UUID, (uuid,),
     )
 

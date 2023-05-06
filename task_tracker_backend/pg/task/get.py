@@ -2,6 +2,7 @@ import logging
 import datetime as dt
 
 from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_GET_TASK = """
 select id, title, content, creator, executor, created_at, updated_at 
@@ -33,9 +34,9 @@ def map_db_task_to_models_task(db_task):
     )
 
 
-def get_task_by_id(task_id: int, dependencies: models.Dependencies):
+def get_task_by_id(task_id: int):
     try:
-        result = dependencies.pg.execute(SQL_GET_TASK, (task_id,))
+        result = pg.Pg.execute(SQL_GET_TASK, (task_id,))
     except Exception as error:
         logging.log(logging.ERROR, error)
         raise RuntimeError('Could not get task by id') from error
@@ -48,13 +49,10 @@ def get_task_by_id(task_id: int, dependencies: models.Dependencies):
 
 
 def get_tasks(
-        name_part: str,
-        last_created_at: dt.datetime,
-        limit: int,
-        dependencies: models.Dependencies,
+        name_part: str, last_created_at: dt.datetime, limit: int,
 ):
     try:
-        result = dependencies.pg.execute(
+        result = pg.Pg.execute(
             SQL_GET_TASKS,
             (
                 last_created_at,

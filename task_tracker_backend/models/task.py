@@ -7,6 +7,8 @@ from typing import List
 
 from pydantic import BaseModel
 
+from task_tracker_backend.models.user import UserLoginName
+
 
 @dataclasses.dataclass
 class Task:

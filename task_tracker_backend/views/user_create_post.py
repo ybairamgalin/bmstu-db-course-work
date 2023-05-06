@@ -9,11 +9,8 @@ from task_tracker_backend.pg.user.get import user_in_database
 from task_tracker_backend.pg.user.save import save_user_returning_id
 
 
-async def user_create_post(
-        request: models.UserCreatePostRequest,
-        dependencies: models.Dependencies
-):
-    if user_in_database(request.username, dependencies):
+async def user_create_post(request: models.UserCreatePostRequest):
+    if user_in_database(request.username):
         return Response(
             utils.to_json(
                 {'message': f'User with name {request.username} already exists'}
@@ -29,8 +26,8 @@ async def user_create_post(
         )
 
     new_db_user = auth.map_request_user_to_db_user(request)
-    user_id = save_user_returning_id(new_db_user, dependencies)
-    token = auth.get_user_token(user_id, dependencies)
+    user_id = save_user_returning_id(new_db_user)
+    token = auth.get_user_token(user_id)
 
     return Response(
         utils.to_json({'username': request.username}),

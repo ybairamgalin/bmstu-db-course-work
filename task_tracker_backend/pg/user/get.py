@@ -1,4 +1,5 @@
 from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_SELECT_USER_ID_BY_USERNAME = """
 select id
@@ -21,15 +22,15 @@ limit %s
 """
 
 
-def user_in_database(username, dependencies: models.Dependencies):
+def user_in_database(username):
     response = (
-        dependencies.pg.execute(SQL_SELECT_USER_ID_BY_USERNAME, (username,))
+        pg.Pg.execute(SQL_SELECT_USER_ID_BY_USERNAME, (username,))
     )
     return len(response) > 0
 
 
-def get_user_by_username(username, dependencies: models.Dependencies):
-    response = dependencies.pg.execute(
+def get_user_by_username(username):
+    response = pg.Pg.execute(
         SQL_SELECT_USER_BY_USERNAME, (username,),
     )
     if len(response) == 0:
@@ -45,11 +46,9 @@ def get_user_by_username(username, dependencies: models.Dependencies):
     )
 
 
-def get_users_by_name_part(
-        query: str, limit: int, dependencies: models.Dependencies
-):
+def get_users_by_name_part(query: str, limit: int):
     like_query_arg = f'%{query.lower()}%'
-    response = dependencies.pg.execute(
+    response = pg.Pg.execute(
         SQL_SELECT_USER_BY_NAME_PART, (like_query_arg, like_query_arg, limit),
     )
     if len(response) == 0:

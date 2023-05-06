@@ -1,6 +1,5 @@
 from typing import List
-
-from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_SAVE_TAGS = """
 insert into task_tracker.tags (value)
@@ -10,13 +9,11 @@ returning id
 """
 
 
-def save_tags_returning_ids(
-        tags: List[str], dependencies: models.Dependencies,
-):
+def save_tags_returning_ids(tags: List[str]):
     if not tags:
         return list()
     try:
-        return dependencies.pg.execute(SQL_SAVE_TAGS, {'tags': tags})
+        return pg.Pg.execute(SQL_SAVE_TAGS, {'tags': tags})
     except Exception as error:
         print(error)
         raise RuntimeError('Could not save tags') from error

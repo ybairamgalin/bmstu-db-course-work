@@ -1,3 +1,5 @@
+-- noinspection SqlWithoutWhereForFile
+
 begin transaction;
 
 delete from task_tracker.tokens;

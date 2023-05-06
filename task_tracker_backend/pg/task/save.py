@@ -1,6 +1,7 @@
 from typing import List
 
 from task_tracker_backend import models
+from task_tracker_backend import pg
 
 SQL_SAVE_TASK = """
 insert into task_tracker.tasks(title, content, creator, executor)
@@ -17,11 +18,9 @@ on conflict (task_id, tag_id) do nothing
 """
 
 
-def save_task_returning_id(
-        task: models.Task, dependencies: models.Dependencies
-):
+def save_task_returning_id(task: models.Task):
     try:
-        db_response = dependencies.pg.execute(
+        db_response = pg.Pg.execute(
             SQL_SAVE_TASK,
             (task.title, task.content, task.creator_id, task.executor_id),
         )
@@ -30,10 +29,8 @@ def save_task_returning_id(
     return db_response[0]
 
 
-def save_task_tags(
-        task_tags: List[models.TaskTag], dependencies: models.Dependencies,
-):
-    dependencies.pg.execute_no_return(
+def save_task_tags(task_tags: List[models.TaskTag]):
+    pg.Pg.execute_no_return(
         SQL_SAVE_TASK_TAGS,
         args={
             'task_tags': [

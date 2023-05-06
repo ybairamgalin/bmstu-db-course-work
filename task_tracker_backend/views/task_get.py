@@ -2,14 +2,13 @@ import dataclasses
 
 from starlette.responses import Response
 
-from task_tracker_backend import models
 from task_tracker_backend import utils
 from task_tracker_backend.pg.task.get import get_task_by_id
 
 
-async def task_get(task_id: int, dependencies: models.Dependencies):
+async def task_get(task_id: int):
     try:
-        task = get_task_by_id(task_id, dependencies)
+        task = get_task_by_id(task_id)
         return Response(utils.to_json({
                 "task": dataclasses.asdict(task)
             }),

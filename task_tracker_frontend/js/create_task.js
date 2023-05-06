@@ -1,7 +1,5 @@
 let tags = []
 
-let last_requested_users_at = Date.now();
-
 function try_get_token() {
     if (localStorage.getItem('x-user-token')) {
         return localStorage.getItem('x-user-token');

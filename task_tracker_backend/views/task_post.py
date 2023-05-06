@@ -37,37 +37,33 @@ def get_tags_to_insert(new_tags: List[str], existing_tags: set[str]):
     return tags_to_insert
 
 
-def merge_tags(tags, dependencies: models.Dependencies):
-    existing_tags = get_tags_by_values(tags, dependencies)
+def merge_tags(tags):
+    existing_tags = get_tags_by_values(tags)
 
     existing_tags_values = {tag.value for tag in existing_tags}
     tags_to_insert = get_tags_to_insert(tags, existing_tags_values)
 
-    new_tag_ids = set(save_tags_returning_ids(tags_to_insert, dependencies))
+    new_tag_ids = set(save_tags_returning_ids(tags_to_insert))
     old_tag_ids = {tag.id for tag in existing_tags}
 
     return old_tag_ids | new_tag_ids
 
 
-def insert_task_tags(tag_ids, task_id, dependencies: models.Dependencies):
+def insert_task_tags(tag_ids, task_id):
     tags = list()
     for tag_id in tag_ids:
         tags.append(models.TaskTag(task_id=task_id, tag_id=tag_id))
-    save_task_tags(tags, dependencies)
+    save_task_tags(tags)
 
 
-async def task_post(
-        request: models.TaskPostRequestBody,
-        token: models.Token,
-        dependencies: models.Dependencies,
-):
+async def task_post(request: models.TaskPostRequestBody, token: models.Token):
     task = convert_to_models_task(request, token.user_id)
 
     try:
-        task_id, task_public_id = save_task_returning_id(task, dependencies)
+        task_id, task_public_id = save_task_returning_id(task)
         if task.tags:
-            tag_ids = merge_tags(task.tags, dependencies)
-            insert_task_tags(tag_ids, task_id, dependencies)
+            tag_ids = merge_tags(task.tags)
+            insert_task_tags(tag_ids, task_id)
     except RuntimeError:
         return Response(
             utils.to_json({'message': 'Could not create task'}),

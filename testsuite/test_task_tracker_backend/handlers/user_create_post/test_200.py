@@ -1,6 +1,5 @@
 import requests
 import datetime as dt
-import pytz
 
 HANDLER = 'http://localhost:6432/api/user/create'
 

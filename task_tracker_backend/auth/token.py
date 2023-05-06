@@ -1,7 +1,10 @@
 import uuid
 import datetime as dt
 
+from typing import Union
+
 from fastapi import HTTPException
+from fastapi import Header
 
 from task_tracker_backend import constants
 from task_tracker_backend import models
@@ -22,26 +25,26 @@ def make_new_token(user_id):
     )
 
 
-def get_user_token(user_id, dependencies: models.Dependencies):
+def get_user_token(user_id):
     """Возвращает существующий или создает новый токен"""
-    tokens = get_tokens_by_user_id(user_id, dependencies)
+    tokens = get_tokens_by_user_id(user_id)
     if len(tokens) == 0:
         token = make_new_token(user_id)
-        return save_token_returning_uuid(token, dependencies)
+        return save_token_returning_uuid(token)
 
     tokens.sort(key=lambda t: t.expires_at, reverse=True)
     latest_token = tokens[0]
     if dt.datetime.now() + TOKEN_RENEW_TIME > latest_token.expires_at:
         token = make_new_token(user_id)
-        return save_token_returning_uuid(token, dependencies)
+        return save_token_returning_uuid(token)
 
     return latest_token.uuid
 
 
-def validate_token(x_user_token: str, dependencies: models.Dependencies):
+def validate_token(x_user_token: Union[str, None] = Header(default=None)):
     if x_user_token is None:
         raise HTTPException(401, f'Missing {constants.X_USER_TOKEN_HEADER} header')
-    token = get_token_by_uuid(x_user_token, dependencies)
+    token = get_token_by_uuid(x_user_token)
     if token is None:
         raise HTTPException(401, f'Bad token')
 

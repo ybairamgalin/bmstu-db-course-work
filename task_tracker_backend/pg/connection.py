@@ -11,6 +11,15 @@ class Pg:
             port=credentials['port'],
         )
 
+    def execute_no_return(self, query, args=()):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, args)
+            self.connection.commit()
+        except Exception as error:
+            self.connection.rollback()
+            raise error
+
     def execute(self, query, args=()):
         try:
             cursor = self.connection.cursor()

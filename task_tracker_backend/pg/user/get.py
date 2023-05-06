@@ -12,6 +12,14 @@ from task_tracker.users
 where username = %s
 """
 
+SQL_SELECT_USER_BY_NAME_PART = """
+select username, name
+from task_tracker.users
+where lower(username) like %s
+   or lower(name) like %s 
+limit %s
+"""
+
 
 def user_in_database(username, dependencies: models.Dependencies):
     response = (
@@ -35,3 +43,20 @@ def get_user_by_username(username, dependencies: models.Dependencies):
         salted_password=db_user[3],
         salt=db_user[4],
     )
+
+
+def get_users_by_name_part(
+        query: str, limit: int, dependencies: models.Dependencies
+):
+    like_query_arg = f'%{query.lower()}%'
+    response = dependencies.pg.execute(
+        SQL_SELECT_USER_BY_NAME_PART, (like_query_arg, like_query_arg, limit),
+    )
+    if len(response) == 0:
+        return list()
+
+    found_users = [
+        models.UserLoginName(name=name, login=login)
+        for login, name in response
+    ]
+    return found_users

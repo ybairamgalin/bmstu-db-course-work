@@ -1,9 +1,13 @@
 import uuid
 import datetime as dt
 
+from fastapi import HTTPException
+
+from task_tracker_backend import constants
 from task_tracker_backend import models
 
 from task_tracker_backend.pg.token.get import get_tokens_by_user_id
+from task_tracker_backend.pg.token.get import get_token_by_uuid
 from task_tracker_backend.pg.token.save import save_token_returning_uuid
 
 TOKEN_LIFETIME = dt.timedelta(hours=1)
@@ -34,22 +38,14 @@ def get_user_token(user_id, dependencies: models.Dependencies):
     return latest_token.uuid
 
 
-# def validate_user(x_user_token: str, dependencies: models.Dependencies):
-#     unauthorized_response = Response(
-#         utils.to_json({'message': 'Unauthorized'}),
-#         status_code=401
-#     )
-#     if x_user_token is None:
-#         return unauthorized_response
-#     token = get_token_by_uuid(x_user_token, dependencies)
-#     if token is None:
-#         return unauthorized_response
-#
-#     if token.expires_at < dt.datetime.utcnow():
-#         return unauthorized_response
-#
-#     return Response(
-#         status_code=200,
-#         headers={constants.X_USER_TOKEN_HEADER: x_user_token}
-#     )
+def validate_token(x_user_token: str, dependencies: models.Dependencies):
+    if x_user_token is None:
+        raise HTTPException(401, f'Missing {constants.X_USER_TOKEN_HEADER} header')
+    token = get_token_by_uuid(x_user_token, dependencies)
+    if token is None:
+        raise HTTPException(401, f'Bad token')
 
+    if token.expires_at < dt.datetime.utcnow():
+        raise HTTPException(401, f'Token has expired')
+
+    return token

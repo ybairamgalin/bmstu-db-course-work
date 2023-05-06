@@ -1,6 +1,13 @@
 import dataclasses
 
+from typing import List
+
 from pydantic import BaseModel
+
+
+class UserLoginName(BaseModel):
+    name: str
+    login: str
 
 
 class UserCreatePostRequest(BaseModel):
@@ -16,6 +23,10 @@ class UserCreatePostResponse(BaseModel):
 class UserAuthPostRequest(BaseModel):
     username: str
     hashed_password: str
+
+
+class UsersFindGetResponse(BaseModel):
+    users: List[UserLoginName]
 
 
 @dataclasses.dataclass

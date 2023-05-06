@@ -20,6 +20,13 @@ async def user_create_post(
             ),
             status_code=409,
         )
+    if '@' in request.name or '@' in request.username:
+        return Response(
+            utils.to_json(
+                {'message': f'Логин и пароль не могут сожердать символ \'@\''},
+            ),
+            status_code=400,
+        )
 
     new_db_user = auth.map_request_user_to_db_user(request)
     user_id = save_user_returning_id(new_db_user, dependencies)

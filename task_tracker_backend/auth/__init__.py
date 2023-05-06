@@ -2,3 +2,4 @@ from task_tracker_backend.auth.sign_up import map_request_user_to_db_user
 from task_tracker_backend.auth.sign_up import hash_password_with_salt
 
 from task_tracker_backend.auth.token import get_user_token
+from task_tracker_backend.auth.token import validate_token

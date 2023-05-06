@@ -31,5 +31,9 @@ async def user_auth_post(
 
     token = auth.get_user_token(user_id, dependencies)
     return Response(
-        headers={constants.X_USER_TOKEN_HEADER: token}, status_code=200,
+        utils.to_json({
+            constants.X_USER_TOKEN_HEADER: token,
+            'name': db_user.name,
+        }),
+        status_code=200,
     )

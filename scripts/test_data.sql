@@ -1,5 +1,6 @@
 begin transaction;
 
+delete from task_tracker.tokens;
 delete from task_tracker.tasks;
 delete from task_tracker.users;
 delete from task_tracker.topics;

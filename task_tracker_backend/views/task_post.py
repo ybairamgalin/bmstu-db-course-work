@@ -15,17 +15,6 @@ def trim_tags(tags: List[str]):
     return [tag.strip() for tag in tags]
 
 
-def convert_to_models_task(
-        user_request: models.TaskPostRequestBody, user_id: int,
-):
-    return models.Task(
-        title=user_request.title,
-        content=user_request.content,
-        creator_id=user_id,
-        tags=trim_tags(user_request.tags),
-    )
-
-
 def get_tags_to_insert(new_tags: List[str], existing_tags: set[str]):
     tags_to_insert = list()
     for tag in new_tags:
@@ -57,12 +46,10 @@ def insert_task_tags(tag_ids, task_id):
 
 
 async def task_post(request: models.TaskPostRequestBody, token: models.Token):
-    task = convert_to_models_task(request, token.user_id)
-
     try:
-        task_id, task_public_id = save_task_returning_id(task)
-        if task.tags:
-            tag_ids = merge_tags(task.tags)
+        task_id, task_public_id = save_task_returning_id(request, token.user_id)
+        if request.tags:
+            tag_ids = merge_tags(request.tags)
             insert_task_tags(tag_ids, task_id)
     except RuntimeError:
         return Response(

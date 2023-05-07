@@ -1,23 +1,51 @@
 import dataclasses
-import datetime
+import datetime as dt
 
-from typing import Optional
+from enum import Enum
+
 from typing import Union
+from typing import Optional
 from typing import List
 
 from pydantic import BaseModel
 
+from task_tracker_backend.models.user import UserLoginName
 
-@dataclasses.dataclass
-class Task:
-    id: Optional[int] = None
-    title: Optional[str] = None
-    content: Optional[str] = None
-    tags: List[str] = None
-    creator_id: Optional[int] = None
-    executor_id: Optional[int] = None
-    created_at: Optional[datetime.datetime] = None
-    updated_at: Optional[datetime.datetime] = None
+
+class TaskStatus(str, Enum):
+    open = 'Открыт'
+    in_progress = 'В работе'
+    blocked = 'Требуется информация'
+    in_review = 'На ревью'
+    closed = 'Закрыт'
+
+    @staticmethod
+    def map_db_status(db_status: str):
+        if db_status == 'open':
+            return TaskStatus.open
+        if db_status == 'in_progress':
+            return TaskStatus.in_progress
+        if db_status == 'in_review':
+            return TaskStatus.in_review
+        if db_status == 'information_required':
+            return TaskStatus.blocked
+        if db_status == 'closed':
+            return TaskStatus.closed
+
+        raise RuntimeError('Map db status ')
+
+
+class Task(BaseModel):
+    title: str
+    creator: UserLoginName
+    tags: List[str]
+    status: TaskStatus
+    created_at: dt.datetime
+    updated_at: dt.datetime
+
+    content: Optional[str]
+    topic: Optional[str]
+    executor: Optional[UserLoginName]
 
 
 @dataclasses.dataclass

@@ -7,17 +7,19 @@ from task_tracker_backend import views
 
 api_router = APIRouter(
     prefix='/api',
-    tags=['API'],
-    responses={404: {'detail': 'Not found'}}
+    tags=['Api'],
+    responses={404: {'detail': 'Not found'}},
 )
 
 
-@api_router.get('/task')
+@api_router.get(
+    '/task', response_model=models.Task, response_model_exclude_none=True,
+)
 async def task_get(
-        task_id: int, _: models.Token = Depends(auth.validate_token),
+        public_id: str, _: models.Token = Depends(auth.validate_token),
 ):
-    """Получение информации о задачи по ее id"""
-    response = await views.task_get(task_id)
+    """Получение информации о задачи по ее public_id"""
+    response = await views.task_get(public_id)
     return response
 
 

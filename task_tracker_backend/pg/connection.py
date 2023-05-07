@@ -1,3 +1,5 @@
+import logging
+
 import psycopg2
 
 
@@ -20,6 +22,7 @@ class Pg:
             cursor.execute(query, args)
             Pg.__connection.commit()
         except Exception as error:
+            logging.error('database exception: %s', error)
             Pg.__connection.rollback()
             raise error
 
@@ -31,6 +34,7 @@ class Pg:
             Pg.__connection.commit()
             return cursor.fetchall()
         except Exception as error:
+            logging.error('database exception: %s', error)
             Pg.__connection.rollback()
             raise error
 

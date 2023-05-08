@@ -32,11 +32,87 @@ function display_tags(tags) {
 
 function parse_date(date_string) {
     let date = new Date(date_string + 'Z');
-    // return date.getDay() + '.' + date.getMonth() + '.' + date.getFullYear() +
-    //     ' ' + date.getHours() + ':' + date.getMinutes();
-
     return date.toLocaleDateString('ru') + ' ' +
         date.toLocaleString('ru', {hour: '2-digit', minute:'2-digit'});
+}
+
+function create_comment_card(comment) {
+    let card = document.createElement('div');
+    card.setAttribute('class', 'card my-3');
+
+    let card_body = document.createElement('div');
+    card_body.setAttribute('class', 'card-body');
+
+    let card_subtitle = document.createElement('h6');
+    card_subtitle.setAttribute('class', 'card-subtitle mb-2 text-muted');
+    card_subtitle.innerText =
+        parse_date(comment['created_at']) + ' ' +
+        comment['author']['name'] + ' @' + comment['author']['login'] +
+        ' добавил комментарий'
+    card_body.appendChild(card_subtitle)
+
+    let card_text = document.createElement('p');
+    card_text.setAttribute('class', 'card-text');
+    card_text.innerText = comment['text'];
+    card_body.appendChild(card_text);
+
+    card.appendChild(card_body);
+    return card;
+}
+
+function show_comments(comments) {
+    let comments_div_element = document.getElementById('task_comments');
+    clear_children(comments_div_element);
+    if (comments.length === 0) {
+        comments_div_element.setAttribute('class', 'my-3')
+        comments_div_element.innerText = 'Комментариев нет';
+        return;
+    }
+    for (let i = 0; i < comments.length; ++i) {
+        let card = create_comment_card(comments[i]);
+        comments_div_element.appendChild(card);
+    }
+}
+
+function handle_comment_add(response) {
+    if (response.status === 201) {
+        window.location.reload();
+        return;
+    }
+
+    alert('Что-то пошло не так, сервер вернул ' + response.status);
+}
+
+function add_comment() {
+    const token = try_get_token();
+    let url = window.location.href;
+
+    let task_id_start_idx = url.lastIndexOf('/');
+    if (task_id_start_idx === -1) {
+        return; // TODO
+    }
+    let task_id = url.substring(task_id_start_idx + 1);
+    let comment_value = document.getElementById('comment_input').value;
+    if (comment_value.trim() === '') {
+        alert('Комментарий не может быть пустым');
+        return;
+    }
+
+    let request = {
+        'text': comment_value.trim(),
+    }
+    fetch('http://localhost:6432/api/task/comment/add?' + new URLSearchParams({
+        public_id: task_id.trim(),
+    }),
+        {
+            method: 'POST',
+            body: JSON.stringify(request),
+            headers: {
+                'X-User-Token': token,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => handle_comment_add(response));
 }
 
 
@@ -79,6 +155,8 @@ function show_task(body) {
     created_at_element.innerText = parse_date(body['created_at']);
     let updated_at_element = document.getElementById('updated_at');
     updated_at_element.innerText = parse_date(body['updated_at']);
+
+    show_comments(body['comments'])
 }
 
 function handle_task_response(response) {

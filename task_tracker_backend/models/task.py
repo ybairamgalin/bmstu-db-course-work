@@ -10,35 +10,15 @@ from typing import List
 from pydantic import BaseModel
 
 from task_tracker_backend.models.user import UserLoginName
-
-
-class TaskStatus(str, Enum):
-    open = 'Открыт'
-    in_progress = 'В работе'
-    blocked = 'Требуется информация'
-    in_review = 'На ревью'
-    closed = 'Закрыт'
-
-    @staticmethod
-    def map_db_status(db_status: str):
-        if db_status == 'open':
-            return TaskStatus.open
-        if db_status == 'in_progress':
-            return TaskStatus.in_progress
-        if db_status == 'in_review':
-            return TaskStatus.in_review
-        if db_status == 'information_required':
-            return TaskStatus.blocked
-        if db_status == 'closed':
-            return TaskStatus.closed
-
-        raise RuntimeError('Map db status ')
+from task_tracker_backend.models.task_status import TaskStatus
+from task_tracker_backend.models.comment import Comment
 
 
 class Task(BaseModel):
     title: str
     creator: UserLoginName
     tags: List[str]
+    comments: List[Comment]
     status: TaskStatus
     created_at: dt.datetime
     updated_at: dt.datetime
@@ -52,6 +32,10 @@ class Task(BaseModel):
 class TaskTag:
     task_id: int
     tag_id: int
+
+
+class TaskStatusUpdatePostRequestBody(BaseModel):
+    new_status: TaskStatus
 
 
 class TaskPostRequestBody(BaseModel):

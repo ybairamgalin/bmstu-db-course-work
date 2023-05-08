@@ -1,16 +1,13 @@
 import logging
 import datetime as dt
+import uuid
 
 from task_tracker_backend import models
 from task_tracker_backend import pg
+from task_tracker_backend import utils
 
 from task_tracker_backend.pg.tag.get import get_tags_by_task_id
-
-SQL_GET_TASK = """
-select id, title, content, creator, executor, created_at, updated_at 
-from task_tracker.tasks
-where id = %s
-"""
+from task_tracker_backend.pg.comment.get import get_comments_by_task_id
 
 SQL_GET_TASK_BY_PUBLIC_ID = """
 select 
@@ -41,6 +38,12 @@ order by created_at desc
 limit %s
 """
 
+SQL_GET_TASK_ID_BY_PUBLIC_ID = """
+select id
+from task_tracker.tasks
+where public_id = %s
+"""
+
 
 def get_task_by_public_id(public_id: str):
     db_tasks = pg.Pg.execute(SQL_GET_TASK_BY_PUBLIC_ID, (public_id,))
@@ -59,6 +62,9 @@ def get_task_by_public_id(public_id: str):
         updated_at=db_task[4],
         creator=models.UserLoginName(login=db_task[5], name=db_task[6]),
         tags=get_tags_by_task_id(task_id),
+        comments=sorted(
+            get_comments_by_task_id(task_id), key=lambda x: x.created_at,
+        ),
         status=models.TaskStatus.map_db_status(db_task[9])
     )
     if db_task[2]:
@@ -69,6 +75,17 @@ def get_task_by_public_id(public_id: str):
         )
 
     return result
+
+
+def get_task_id_by_public_id(public_id: str):
+    if not utils.is_valid_uuid(public_id):
+        raise RuntimeError(f'Public id {public_id} is not a valid uuid')
+
+    result = pg.Pg.execute(SQL_GET_TASK_ID_BY_PUBLIC_ID, (public_id,))
+    if len(result) != 1:
+        raise RuntimeError(f'No task with public id {public_id}')
+
+    return result[0][0]
 
 
 def get_tasks(

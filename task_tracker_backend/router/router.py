@@ -43,6 +43,28 @@ async def task_info_post(
     return response
 
 
+@api_router.post('/task/comment/add', status_code=201)
+async def task_comment_add_post(
+        public_id: str,
+        body: models.CommentAddPostRequestBody,
+        auth_token: models.Token = Depends(auth.validate_token),
+):
+    """Ручка добавления комментария к задаче"""
+    response = await views.task_comment_add_post(public_id, body, auth_token)
+    return response
+
+
+@api_router.post('/task/status/update')
+async def task_status_update_post(
+        public_id: str,
+        body: models.TaskStatusUpdatePostRequestBody,
+        _: models.Token = Depends(auth.validate_token),
+):
+    """Ручка обновления статуса задачи"""
+    response = await views.task_status_update_post(public_id, body)
+    return response
+
+
 @api_router.get('/topic/info')
 async def topic_info_get(_: models.Token = Depends(auth.validate_token)):
     """Получение информации о всех топиках"""

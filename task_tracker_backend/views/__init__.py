@@ -1,6 +1,13 @@
+from task_tracker_backend.views.task_status_update_post import (
+    task_status_update_post,
+)
 from task_tracker_backend.views.task_post import task_post
 from task_tracker_backend.views.task_info_post import task_info_post
 from task_tracker_backend.views.task_get import task_get
+from task_tracker_backend.views.task_comment_add_post import (
+    task_comment_add_post,
+)
+
 
 from task_tracker_backend.views.topic_info_get import topic_info_get
 

@@ -30,7 +30,7 @@
         <div class="dropdown"><p id="username_paragraph"></p></div>
     </div>
 
-    <div class="d-flex flex-fill flex-column p-3">
+    <div class="d-flex flex-fill flex-column p-3" style="overflow-y: scroll;">
         <div class="row my-2">
             <label id='label_created_at' for="task_name">Название задачи</label>
             <h2 id="task_name"></h2>
@@ -79,6 +79,19 @@
                 <div class="row">
                     <h6 class="col-4">Обновлена:</h6>
                     <p class="col-8" id="updated_at"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h5>Комментарии</h5>
+            <div id="task_comments"></div>
+            <div id="create_task_comment">
+                <div class="input-group mb-3">
+                    <input type="text" id="comment_input" class="form-control" placeholder="Оставьте комментарий"
+                           aria-label="Оставьте комментарий" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2" onclick="add_comment()">
+                        Добавить
+                    </button>
                 </div>
             </div>
         </div>

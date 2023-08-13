@@ -7,6 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from task_tracker_backend import models
 from task_tracker_backend import pg
+from task_tracker_backend import kafka
+from task_tracker_backend import clickhouse
 from task_tracker_backend import utils
 from task_tracker_backend import router
 
@@ -14,10 +16,13 @@ task_tracker = FastAPI()
 
 models.Config.load_config()
 pg.Pg.open_connection(models.Config.get_item('postgres'))
+kafka.Producer.open_connection(models.Config.get_item('kafka-producer'))
+clickhouse.Clickhouse.open_connection(models.Config.get_item('clickhouse'))
 utils.setup_logging()
 
 origins = [
     "http://localhost",
+    "http://localhost:3000",
     "http://localhost:80",
 ]
 task_tracker.add_middleware(

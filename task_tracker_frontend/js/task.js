@@ -1,3 +1,36 @@
+const status_to_next_statuses = {
+    'Отркыт': [
+        'В работу',
+        'Требуется информация',
+        'Закрыть',
+    ],
+    'В работе': [
+        'На паузу',
+        'На ревью',
+        'Требуется информация',
+        'Закрыть',
+    ],
+    'В работе (на паузе)': [
+        'В работу',
+        'На ревью',
+        'Требуется информация',
+        'Закрыть',
+    ],
+    'Требуется информация': [
+        'Открыть',
+        'В работу',
+        'Закрыть',
+    ],
+    'На ревью': [
+        'В работу',
+        'Требуется информация',
+        'Закрыть',
+    ],
+    'Закрыт': [
+        'Переоткрыть',
+    ],
+}
+
 function try_get_token() {
     if (localStorage.getItem('x-user-token')) {
         return localStorage.getItem('x-user-token');
@@ -115,6 +148,14 @@ function add_comment() {
         .then(response => handle_comment_add(response));
 }
 
+function format_spent_time(seconds) {
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds % 3600) / 60);
+    let secs = Math.floor(((seconds % 3600) % 60));
+
+    return hours + ' ч. ' + minutes + ' мин. ' + secs + ' сек.'
+}
+
 
 function show_task(body) {
     let task_name_element = document.getElementById('task_name');
@@ -155,6 +196,13 @@ function show_task(body) {
     created_at_element.innerText = parse_date(body['created_at']);
     let updated_at_element = document.getElementById('updated_at');
     updated_at_element.innerText = parse_date(body['updated_at']);
+
+    let spent_time_element = document.getElementById('spent_time')
+    if (body['spent_time'] !== undefined) {
+        spent_time_element.innerText = format_spent_time(body['spent_time']);
+    } else {
+        spent_time_element.innerText = '-';
+    }
 
     show_comments(body['comments'])
 }

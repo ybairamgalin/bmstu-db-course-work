@@ -1,3 +1,5 @@
+import datetime as dt
+
 from typing import List
 
 from task_tracker_backend import models
@@ -26,6 +28,14 @@ set
     status = %s,
     updated_at = now()
 where public_id = %s
+"""
+
+SQL_INCREASE_TASK_SPENT_TIME = """
+update task_tracker.tasks
+set
+    spent_time = coalesce(spent_time, interval '0 seconds') + %s,
+    updated_at = now()
+where id = %s
 """
 
 
@@ -59,4 +69,10 @@ def save_task_status(public_id: str, status: models.TaskStatus):
         raise RuntimeError(f'f{public_id} is not a valid uuid')
     pg.Pg.execute_no_return(
         SQL_SAVE_TASK_STATUS, (status.convert_to_db_status(), public_id)
+    )
+
+
+def increase_task_spent_time(spent_time: dt.timedelta, task_id: int):
+    pg.Pg.execute_no_return(
+        SQL_INCREASE_TASK_SPENT_TIME, (spent_time, task_id)
     )

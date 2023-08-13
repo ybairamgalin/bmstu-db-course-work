@@ -147,7 +147,6 @@ function display_tasks(tasks) {
 
 function show_all_tasks() {
     let request_body = {
-        'cursor': 'ladksfjlkdj',
         'name_part': document.getElementById('task_search_field').value
     }
 
@@ -158,7 +157,7 @@ function show_all_tasks() {
     }
     const token = try_get_token()
 
-    fetch('http://localhost:6432/api/task/info', {
+    fetch('http://localhost:6432/api/tasks/info', {
             method: 'POST',
             body: JSON.stringify(request_body),
             headers: {

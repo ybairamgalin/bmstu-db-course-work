@@ -9,7 +9,11 @@ from task_tracker_backend.models.task import Task
 from task_tracker_backend.models.task import TaskTag
 from task_tracker_backend.models.task import TaskStatusUpdatePostRequestBody
 from task_tracker_backend.models.task import TaskPostRequestBody
-from task_tracker_backend.models.task import TaskInfoPostRequestBody
+from task_tracker_backend.models.task import TasksInfoPostResponse
+from task_tracker_backend.models.task import TasksInfoPostRequestBody
+
+from task_tracker_backend.models.task_change import TaskChange
+from task_tracker_backend.models.task_change import TaskField
 
 from task_tracker_backend.models.task_status import TaskStatus
 

@@ -33,13 +33,17 @@ async def task_post(
     return response
 
 
-@api_router.post('/task/info')
-async def task_info_post(
-        body: models.TaskInfoPostRequestBody,
+@api_router.post(
+    '/tasks/info',
+    response_model=models.TasksInfoPostResponse,
+    response_model_exclude_none=True,
+)
+async def tasks_info_post(
+        body: models.TasksInfoPostRequestBody,
         _: models.Token = Depends(auth.validate_token),
 ):
     """Ручка фильтрации и поиска задач"""
-    response = await views.task_info_post(body)
+    response = await views.tasks_info_post(body)
     return response
 
 
@@ -58,10 +62,32 @@ async def task_comment_add_post(
 async def task_status_update_post(
         public_id: str,
         body: models.TaskStatusUpdatePostRequestBody,
-        _: models.Token = Depends(auth.validate_token),
+        auth_token: models.Token = Depends(auth.validate_token),
 ):
     """Ручка обновления статуса задачи"""
-    response = await views.task_status_update_post(public_id, body)
+    response = await views.task_status_update_post(
+        public_id, body, auth_token
+    )
+    return response
+
+
+@api_router.post('/task/timer/start')
+async def task_timer_start(
+        public_id: str,
+        auth_token: models.Token = Depends(auth.validate_token),
+):
+    """Ручка запуска таймера задачи"""
+    response = await views.task_timer_start_post(public_id, auth_token)
+    return response
+
+
+@api_router.post('/task/timer/stop')
+async def task_timer_stop(
+        public_id: str,
+        auth_token: models.Token = Depends(auth.validate_token),
+):
+    """Ручка остановки таймера задачи"""
+    response = await views.task_timer_stop_post(public_id, auth_token)
     return response
 
 
@@ -101,4 +127,15 @@ async def users_find_get(
 ):
     """Поиск пользователя по части имени или логина"""
     response = await views.users_find_get(query, limit)
+    return response
+
+
+@api_router.post(
+    '/audit/import-tasks'
+)
+async def audit_import_tasks(
+        _: models.Token = Depends(auth.validate_token)
+):
+    """Поставить задачу на вышрузку всех задач в xlsx"""
+    response = await views.audit_import_tasks_post()
     return response

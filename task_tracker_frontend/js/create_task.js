@@ -9,7 +9,7 @@ function try_get_token() {
 }
 
 function parse_executor_name(string) {
-    if (string === 'Не назначен') {
+    if (string === 'Не назначен' || string === '') {
         return -1;
     }
     if (Array.from(string).indexOf('@') === -1) {

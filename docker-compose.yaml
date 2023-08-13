@@ -1,9 +1,9 @@
 version: "3.5"
 
 services:
-    postgres_master:
+    postgres_db:
         image: postgres:14.5-bullseye
-        container_name: pg_master
+        container_name: postgres_db
         volumes:
           - ./postgres:/postgres/schema
         restart: unless-stopped
@@ -16,9 +16,9 @@ services:
         networks:
           - task_tracker_network
 
-    webserver:
+    nginx_webserver:
         image: nginx:alpine
-        container_name: webserver
+        container_name: nginx_webserver
         volumes:
           - ./task_tracker_frontend:/usr/share/nginx/html
           - ./nginx:/etc/nginx/conf.d
@@ -30,11 +30,14 @@ services:
         networks:
           - task_tracker_network
 
-    backend:
+    task_tracker_backend:
         image: ubuntu:22.04
+        container_name: task_tracker_backend
         build: task_tracker_backend/.
         depends_on:
-            postgres_master:
+            postgres_db:
+                condition: service_started
+            kafka_service:
                 condition: service_started
         command: /bin/sh task_tracker_backend/startup.sh
         volumes:
@@ -46,6 +49,52 @@ services:
           - "6432:8000"
         networks:
           - task_tracker_network
+
+    transfers:
+        image: ubuntu:23.04
+        container_name: transfers
+        build: transfers/.
+        command: python3 tasks_history_transfer.py
+        ports:
+            - "7432:8000"
+        restart: unless-stopped
+        volumes:
+          - ./transfers:/transfers
+        networks:
+            - task_tracker_network
+
+    zookeeper_kafka:
+        image: confluentinc/cp-zookeeper:latest
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+        ports:
+            - "2181:2181"
+        networks:
+            - task_tracker_network
+
+    kafka_service:
+        image: confluentinc/cp-kafka:latest
+        container_name: kafka_service
+        depends_on:
+            - zookeeper_kafka
+        ports:
+            - "29092:29092"
+        environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper_kafka:2181
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_service:29092
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+            KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        networks:
+            - task_tracker_network
+    clickhouse_server:
+        image: yandex/clickhouse-server
+        ports:
+            - "8123:8123"
+        networks:
+            - task_tracker_network
 
 networks:
     task_tracker_network:

@@ -1,23 +1,30 @@
 import dataclasses
-import datetime
+import datetime as dt
 
 from typing import Optional
-from typing import Union
 from typing import List
 
 from pydantic import BaseModel
 
+from task_tracker_backend.models.user import UserLoginName
+from task_tracker_backend.models.task_status import TaskStatus
+from task_tracker_backend.models.comment import Comment
 
-@dataclasses.dataclass
-class Task:
-    id: Optional[int] = None
-    title: Optional[str] = None
+
+class Task(BaseModel):
+    public_id: str
+    title: str
+    creator: UserLoginName
+    status: TaskStatus
+    created_at: dt.datetime
+    updated_at: dt.datetime
+    tags: List[str] = list()
+    comments: List[Comment] = list()
+
     content: Optional[str] = None
-    tags: List[str] = None
-    creator_id: Optional[int] = None
-    executor_id: Optional[int] = None
-    created_at: Optional[datetime.datetime] = None
-    updated_at: Optional[datetime.datetime] = None
+    topic: Optional[str] = None
+    executor: Optional[UserLoginName] = None
+    spent_time: Optional[dt.timedelta] = None
 
 
 @dataclasses.dataclass
@@ -26,16 +33,27 @@ class TaskTag:
     tag_id: int
 
 
+class TaskStatusUpdatePostRequestBody(BaseModel):
+    new_status: TaskStatus
+
+
 class TaskPostRequestBody(BaseModel):
     title: str
-    tags: List[str] = None
-    content: Union[str, None] = None
-    executor_username: Union[str, None] = None
+    tags: List[str] = list()
+    content: Optional[str] = None
+    executor_username: Optional[str] = None
 
 
-class TaskInfoPostRequestBody(BaseModel):
-    cursor: Union[str, None] = None
-    name_part: Union[str, None] = None
-    topic: Union[str, None] = None
-    order_by: Union[str, None] = None
-    executor_username: Union[str, None] = None
+class TasksInfoPostRequestBody(BaseModel):
+    limit: int = 10
+
+    tags: List[str] = list()
+    name_part: Optional[str] = None
+    executor_username: Optional[str] = None
+    order_by: Optional[str] = None
+    cursor: Optional[bytes] = None
+
+
+class TasksInfoPostResponse(BaseModel):
+    tasks: List[Task]
+    cursor: bytes

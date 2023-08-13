@@ -15,5 +15,4 @@ def save_tags_returning_ids(tags: List[str]):
     try:
         return pg.Pg.execute(SQL_SAVE_TAGS, {'tags': tags})
     except Exception as error:
-        print(error)
         raise RuntimeError('Could not save tags') from error
